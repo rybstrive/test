@@ -2,7 +2,7 @@
 
 一个用于验证 **GitHub Webhook → 阿里云 ACR 自动构建** 链路的最小测试项目。
 
-这是一个 Go 写的 HTTP 服务。Dockerfile 采用**多阶段构建**：编译阶段用 `golang:1.26-alpine` 产出静态二进制，运行阶段只把二进制拷入极简的 `alpine` 镜像。
+这是一个 Go 写的 HTTP 服务。Dockerfile 采用**多阶段构建**：编译阶段用 `golang:1.26-alpine` 产出静态二进制，运行阶段只把二进制拷入极简的 `alpine` 镜像。两个基础镜像均使用国内 DaoCloud 镜像源 `docker.m.daocloud.io/library/...`，避免 ACR 构建时访问 Docker Hub 失败。
 
 ## 项目内容
 

@@ -1,4 +1,4 @@
-FROM golang:1.26-alpine AS builder
+FROM docker.m.daocloud.io/library/golang:1.26-alpine AS builder
 
 WORKDIR /src
 
@@ -10,7 +10,7 @@ COPY main.go .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -trimpath -ldflags="-s -w" -o /out/app .
 
-FROM alpine:3.21
+FROM docker.m.daocloud.io/library/alpine:3.21
 
 COPY --from=builder /out/app /usr/local/bin/app
 
