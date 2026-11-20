@@ -2,18 +2,27 @@
 
 一个用于验证 **GitHub Webhook → 阿里云 ACR 自动构建** 链路的最小测试项目。
 
+这是一个 Go 写的 HTTP 服务。Dockerfile 采用**多阶段构建**：编译阶段用 `golang:1.26-alpine` 产出静态二进制，运行阶段只把二进制拷入极简的 `alpine` 镜像。
+
 ## 项目内容
 
-- `app.py`：基于 Python 标准库的 HTTP 服务，监听 `8080`，返回一段 JSON
-- `Dockerfile`：基于 `python:3.12-slim` 构建镜像
-- `.dockerignore` / `.gitignore`
+- `main.go`：HTTP 服务，监听 `8080`，返回一段 JSON
+- `go.mod`：Go module 定义（无外部依赖）
+- `Dockerfile`：多阶段构建，最终镜像只包含编译后的二进制
 
 ## 本地验证
 
 ```bash
-python app.py
+go build -o app .
+./app
 # 另开终端
 curl http://localhost:8080/
+```
+
+交叉编译成与容器一致的 Linux 二进制：
+
+```bash
+GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o app .
 ```
 
 构建镜像：
