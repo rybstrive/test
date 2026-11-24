@@ -1,4 +1,6 @@
-FROM docker.m.daocloud.io/library/golang:1.26-alpine AS builder
+FROM --platform=$BUILDPLATFORM docker.m.daocloud.io/library/golang:1.26-alpine AS builder
+
+ARG TARGETARCH
 
 WORKDIR /src
 
@@ -7,7 +9,7 @@ RUN go mod download
 
 COPY main.go .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH \
     go build -trimpath -ldflags="-s -w" -o /out/app .
 
 FROM docker.m.daocloud.io/library/alpine:3.21
